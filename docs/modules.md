@@ -1,199 +1,239 @@
-# FILM STUDIO PROCUREMENT APPROVAL AND INVENTORY MANAGEMENT SYSTEM
+# MODULES DOCUMENTATION
 
-# MODULE DOCUMENTATION
+# Film Studio Procurement Approval and Inventory Management System
 
-## Version 1.0
+Version 1.0
 
 ---
 
 # 1. INTRODUCTION
 
-## Purpose
+This document describes every system module, its responsibilities, business rules, database dependencies, screen dependencies, and security requirements.
 
-This document defines all functional modules of the Film Studio Procurement Approval and Inventory Management System.
+Purpose:
 
-The document provides:
-
-* Module objectives
-* Responsibilities
-* Features
-* Database dependencies
-* User access permissions
-* Future implementation scope
+* Development Guide
+* Architecture Reference
+* Testing Reference
+* Maintenance Reference
 
 ---
 
-# 2. SYSTEM MODULE OVERVIEW
+# 2. AUTHENTICATION MODULE
 
-The system consists of ten major modules:
+## Module Name
 
-1. Authentication Module
-2. Dashboard Module
-3. User Management Module
-4. Procurement Request Module
-5. Approval Workflow Module
-6. Inventory Management Module
-7. Supplier Management Module
-8. Purchase Order Module
-9. Reporting Module
-10. Audit & Notification Module
-
----
-
-# 3. AUTHENTICATION MODULE
+Authentication Module
 
 ## Purpose
 
-Manage user login, logout, and session security.
+Manage user authentication and access control.
 
-## Users
+---
 
-* Administrator
-* Manager
-* Procurement Officer
-* Department Head
-* Staff
+## Responsibilities
 
-## Features
-
-* Login
-* Logout
+* User Login
+* User Logout
 * Session Management
-* Password Validation
-* Role Verification
-* Access Control
+* Password Verification
+* Access Validation
+
+---
 
 ## Database Tables
 
 users
 
-## Pages
+---
 
-/auth/login
+## Screens
 
-/auth/logout
+AUTH-001 Login
 
-/profile
-
-## Future Enhancements
-
-* Password Reset
-* Two-Factor Authentication
-* Account Lockout Protection
+AUTH-002 Logout
 
 ---
 
-# 4. DASHBOARD MODULE
+## Business Rules
+
+1. Users must authenticate before accessing protected pages.
+
+2. Passwords must be hashed.
+
+3. Sessions must be validated.
+
+4. Inactive users cannot login.
+
+---
+
+## Dependencies
+
+users table
+
+PHP Sessions
+
+---
+
+## Access Rights
+
+All Users
+
+---
+
+# 3. DASHBOARD MODULE
+
+## Module Name
+
+Dashboard Module
 
 ## Purpose
 
-Provide real-time system overview.
+Provide system overview and operational KPIs.
 
-## Users
+---
 
-All authenticated users.
+## Responsibilities
 
-## Features
+* Display Metrics
+* Display Alerts
+* Display Pending Actions
+* Display Notifications
 
-* Procurement Statistics
-* Pending Approvals
-* Inventory Status
-* Purchase Order Summary
-* Notifications
-* Recent Activities
+---
 
 ## Database Tables
 
 procurement_requests
 
-approval_workflows
-
 inventory_items
 
 purchase_orders
+
+approval_workflows
 
 notifications
 
 activity_logs
 
-## Pages
+---
 
-/dashboard
+## Screens
 
-## Future Enhancements
+DASH-001 Main Dashboard
 
-* Charts
-* KPIs
-* Performance Analytics
-* Procurement Trends
+DASH-002 Notifications Panel
 
 ---
 
-# 5. USER MANAGEMENT MODULE
+## Business Rules
+
+1. Dashboard content depends on user role.
+
+2. Pending approvals must be displayed to approvers.
+
+3. Low stock alerts must be displayed.
+
+---
+
+## Dependencies
+
+Authentication Module
+
+All Core Business Modules
+
+---
+
+## Access Rights
+
+All Authenticated Users
+
+---
+
+# 4. USER MANAGEMENT MODULE
+
+## Module Name
+
+User Management Module
 
 ## Purpose
 
 Manage user accounts and permissions.
 
-## Users
+---
 
-Administrator
+## Responsibilities
 
-## Features
-
-* Create User
-* Edit User
-* Deactivate User
+* Create Users
+* Edit Users
+* Deactivate Users
 * Assign Roles
-* Department Assignment
-* User Search
+* Manage Departments
+
+---
 
 ## Database Tables
 
 users
 
-## Pages
+---
 
-/users
+## Screens
 
-/users/create
+USER-001 User List
 
-/users/edit
+USER-002 Create User
 
-/users/view
+USER-003 Edit User
 
-## Future Enhancements
-
-* Role Templates
-* Permission Matrix
-* User Activity Reports
+USER-004 User Profile
 
 ---
 
-# 6. PROCUREMENT REQUEST MODULE
+## Business Rules
+
+1. Only administrators may manage users.
+
+2. Email addresses must be unique.
+
+3. Usernames must be unique.
+
+4. Roles must be valid.
+
+---
+
+## Dependencies
+
+Authentication Module
+
+---
+
+## Access Rights
+
+Administrator Only
+
+---
+
+# 5. PROCUREMENT REQUEST MODULE
+
+## Module Name
+
+Procurement Request Module
 
 ## Purpose
 
-Manage procurement requests from departments.
+Manage procurement requests.
 
-## Users
+---
 
-Staff
+## Responsibilities
 
-Department Heads
+* Create Requests
+* Edit Requests
+* Submit Requests
+* Track Requests
 
-Managers
-
-Procurement Officers
-
-## Features
-
-* Create Request
-* Edit Draft Request
-* Submit Request
-* View Status
-* Attach Justification
-* View History
+---
 
 ## Database Tables
 
@@ -203,46 +243,76 @@ procurement_request_items
 
 users
 
-## Pages
+---
 
-/requests
+## Screens
 
-/requests/create
+REQ-001 Request List
 
-/requests/edit
+REQ-002 Create Request
 
-/requests/view
+REQ-003 Request Items
 
-## Future Enhancements
+REQ-004 Request Details
 
-* File Attachments
-* Budget Validation
-* Request Templates
+REQ-005 Edit Request
 
 ---
 
-# 7. APPROVAL WORKFLOW MODULE
+## Business Rules
+
+1. Requests begin in Draft status.
+
+2. Submitted requests become Pending.
+
+3. Draft requests may be edited.
+
+4. Submitted requests cannot be modified.
+
+5. Requests require at least one item.
+
+---
+
+## Dependencies
+
+User Management
+
+Approval Workflow
+
+---
+
+## Access Rights
+
+Staff
+
+Department Head
+
+Manager
+
+Administrator
+
+---
+
+# 6. APPROVAL WORKFLOW MODULE
+
+## Module Name
+
+Approval Workflow Module
 
 ## Purpose
 
-Manage request approval processes.
+Manage procurement approvals.
 
-## Users
+---
 
-Department Heads
-
-Managers
-
-Administrators
-
-## Features
+## Responsibilities
 
 * Review Requests
 * Approve Requests
 * Reject Requests
-* Add Comments
-* Approval Tracking
-* Approval History
+* Record Decisions
+
+---
 
 ## Database Tables
 
@@ -252,42 +322,70 @@ procurement_requests
 
 users
 
-## Pages
+---
 
-/approvals
+## Screens
 
-/approvals/view
+APR-001 Pending Approvals
 
-## Future Enhancements
+APR-002 Approval Review
 
-* Multi-Level Approval Chains
-* Delegation Rules
-* Escalation Workflow
+APR-003 Approval History
 
 ---
 
-# 8. INVENTORY MANAGEMENT MODULE
+## Business Rules
+
+1. Only authorized approvers may approve.
+
+2. Approvals must be recorded.
+
+3. Rejections require comments.
+
+4. Approval history cannot be deleted.
+
+---
+
+## Dependencies
+
+Procurement Requests
+
+Notifications
+
+Audit Logs
+
+---
+
+## Access Rights
+
+Department Head
+
+Manager
+
+Administrator
+
+---
+
+# 7. INVENTORY MANAGEMENT MODULE
+
+## Module Name
+
+Inventory Management Module
 
 ## Purpose
 
-Manage studio inventory and stock levels.
+Manage inventory assets and stock levels.
 
-## Users
+---
 
-Procurement Officers
+## Responsibilities
 
-Administrators
+* Create Inventory Items
+* Update Inventory Items
+* Monitor Stock
+* Generate Alerts
 
-Managers
-
-## Features
-
-* Add Inventory Item
-* Edit Inventory Item
-* Delete Inventory Item
-* Search Inventory
-* Monitor Stock Levels
-* Reorder Monitoring
+---
 
 ## Database Tables
 
@@ -299,88 +397,142 @@ suppliers
 
 inventory_transactions
 
-## Pages
+---
 
-/inventory
+## Screens
 
-/inventory/create
+INV-001 Inventory List
 
-/inventory/edit
+INV-002 Create Inventory Item
 
-/inventory/view
+INV-003 Edit Inventory Item
 
-## Future Enhancements
+INV-004 Inventory Details
 
-* Barcode Support
-* QR Code Tracking
-* Asset Lifecycle Management
+INV-005 Low Stock Report
+
+INV-006 Transaction History
 
 ---
 
-# 9. SUPPLIER MANAGEMENT MODULE
+## Business Rules
+
+1. Item codes must be unique.
+
+2. Stock cannot become negative.
+
+3. Inventory updates must generate transactions.
+
+4. Reorder alerts are based on reorder levels.
+
+---
+
+## Dependencies
+
+Supplier Module
+
+Inventory Transaction Module
+
+---
+
+## Access Rights
+
+Procurement Officer
+
+Manager
+
+Administrator
+
+---
+
+# 8. SUPPLIER MANAGEMENT MODULE
+
+## Module Name
+
+Supplier Management Module
 
 ## Purpose
 
-Manage supplier information.
+Manage suppliers.
 
-## Users
+---
 
-Procurement Officers
+## Responsibilities
 
-Administrators
+* Register Suppliers
+* Update Suppliers
+* View Supplier Profiles
 
-## Features
-
-* Add Supplier
-* Edit Supplier
-* Supplier Search
-* Supplier Rating
-* Supplier Status Tracking
+---
 
 ## Database Tables
 
 suppliers
 
-## Pages
+inventory_items
 
-/suppliers
-
-/suppliers/create
-
-/suppliers/edit
-
-/suppliers/view
-
-## Future Enhancements
-
-* Supplier Evaluation
-* Vendor Performance Reports
-* Contract Tracking
+purchase_orders
 
 ---
 
-# 10. PURCHASE ORDER MODULE
+## Screens
+
+SUP-001 Supplier List
+
+SUP-002 Create Supplier
+
+SUP-003 Edit Supplier
+
+SUP-004 Supplier Details
+
+---
+
+## Business Rules
+
+1. Supplier names must be unique.
+
+2. Suppliers may be deactivated.
+
+3. Historical records must be preserved.
+
+---
+
+## Dependencies
+
+Purchase Orders
+
+Inventory
+
+---
+
+## Access Rights
+
+Procurement Officer
+
+Administrator
+
+---
+
+# 9. PURCHASE ORDER MODULE
+
+## Module Name
+
+Purchase Order Module
 
 ## Purpose
 
-Manage procurement purchasing activities.
+Manage purchasing operations.
 
-## Users
+---
 
-Procurement Officers
+## Responsibilities
 
-Managers
-
-Administrators
-
-## Features
-
-* Create Purchase Order
-* Link Approved Requests
-* Manage Deliveries
+* Create Purchase Orders
+* Manage PO Items
+* Track Deliveries
 * Receive Goods
-* Update Inventory
-* Order Tracking
+
+---
 
 ## Database Tables
 
@@ -394,205 +546,451 @@ procurement_requests
 
 inventory_items
 
-## Pages
+---
 
-/purchase_orders
+## Screens
 
-/purchase_orders/create
+PO-001 Purchase Order List
 
-/purchase_orders/edit
+PO-002 Create Purchase Order
 
-/purchase_orders/view
+PO-003 Purchase Order Details
 
-## Future Enhancements
+PO-004 Receive Goods
 
-* PDF Purchase Orders
-* Supplier Email Integration
-* Delivery Scheduling
+PO-005 Purchase Order History
 
 ---
 
-# 11. REPORTING MODULE
+## Business Rules
 
-## Purpose
+1. POs originate from approved requests.
 
-Generate operational and management reports.
+2. Suppliers must exist before PO creation.
 
-## Users
+3. Receiving goods updates inventory.
 
-Administrators
-
-Managers
-
-Procurement Officers
-
-## Features
-
-* Procurement Reports
-* Approval Reports
-* Inventory Reports
-* Supplier Reports
-* Purchase Order Reports
-
-## Database Tables
-
-All system tables
-
-## Pages
-
-/reports
-
-/reports/procurement
-
-/reports/inventory
-
-/reports/suppliers
-
-/reports/purchase_orders
-
-## Future Enhancements
-
-* Dashboard Analytics
-* Export to PDF
-* Export to Excel
-* Scheduled Reports
+4. Receiving goods creates inventory transactions.
 
 ---
 
-# 12. AUDIT & NOTIFICATION MODULE
+## Dependencies
+
+Procurement Requests
+
+Inventory
+
+Suppliers
+
+Notifications
+
+Audit Logs
+
+---
+
+## Access Rights
+
+Procurement Officer
+
+Manager
+
+Administrator
+
+---
+
+# 10. INVENTORY TRANSACTION MODULE
+
+## Module Name
+
+Inventory Transaction Module
 
 ## Purpose
 
-Track activities and notify users.
+Maintain stock movement history.
 
-## Users
+---
 
-All users
+## Responsibilities
 
-## Features
+* Record Receipts
+* Record Issues
+* Record Adjustments
+* Record Returns
 
-### Audit
-
-* Activity Tracking
-* User Actions
-* Entity Changes
-* Security Monitoring
-
-### Notifications
-
-* Approval Requests
-* Status Updates
-* Procurement Updates
-* Inventory Alerts
+---
 
 ## Database Tables
 
-activity_logs
+inventory_transactions
+
+inventory_items
+
+users
+
+---
+
+## Business Rules
+
+1. Every stock movement creates a transaction.
+
+2. Transactions are immutable.
+
+3. Historical records must remain intact.
+
+---
+
+## Dependencies
+
+Inventory Module
+
+Purchase Orders
+
+---
+
+## Access Rights
+
+Procurement Officer
+
+Administrator
+
+---
+
+# 11. NOTIFICATION MODULE
+
+## Module Name
+
+Notification Module
+
+## Purpose
+
+Deliver workflow notifications.
+
+---
+
+## Responsibilities
+
+* Create Notifications
+* Display Notifications
+* Track Read Status
+
+---
+
+## Database Tables
 
 notifications
 
 users
 
-## Pages
+---
 
-/notifications
+## Screens
 
-/activity_logs
+NOT-001 Notification List
 
-## Future Enhancements
-
-* Email Notifications
-* SMS Notifications
-* Push Notifications
+NOT-002 Notification Details
 
 ---
 
-# 13. ROLE ACCESS MATRIX
+## Business Rules
 
-| Module               | Admin | Manager | Procurement Officer | Department Head | Staff |
-| -------------------- | ----- | ------- | ------------------- | --------------- | ----- |
-| Dashboard            | Yes   | Yes     | Yes                 | Yes             | Yes   |
-| User Management      | Yes   | No      | No                  | No              | No    |
-| Procurement Requests | Yes   | Yes     | Yes                 | Yes             | Yes   |
-| Approval Workflow    | Yes   | Yes     | No                  | Yes             | No    |
-| Inventory            | Yes   | Yes     | Yes                 | No              | No    |
-| Suppliers            | Yes   | No      | Yes                 | No              | No    |
-| Purchase Orders      | Yes   | Yes     | Yes                 | No              | No    |
-| Reports              | Yes   | Yes     | Yes                 | No              | No    |
-| Notifications        | Yes   | Yes     | Yes                 | Yes             | Yes   |
-| Activity Logs        | Yes   | No      | No                  | No              | No    |
+1. Notifications are generated automatically.
+
+2. Users may mark notifications as read.
+
+3. Notification history is retained.
 
 ---
 
-# 14. DEVELOPMENT ROADMAP
+## Dependencies
 
-## Phase 1
+Approval Workflow
 
-Foundation
-
-* Authentication
-* Dashboard
-* User Management
-
-## Phase 2
-
-Core Procurement
-
-* Procurement Requests
-* Approval Workflow
-
-## Phase 3
+Purchase Orders
 
 Inventory
 
-* Inventory Management
+---
+
+## Access Rights
+
+All Users
+
+---
+
+# 12. REPORTING MODULE
+
+## Module Name
+
+Reporting Module
+
+## Purpose
+
+Generate management reports.
+
+---
+
+## Responsibilities
+
+* Procurement Reports
+* Inventory Reports
+* Supplier Reports
+* Purchase Order Reports
+
+---
+
+## Database Tables
+
+All Business Tables
+
+---
+
+## Screens
+
+REP-001 Procurement Report
+
+REP-002 Inventory Report
+
+REP-003 Supplier Report
+
+REP-004 Purchase Order Report
+
+REP-005 Inventory Transaction Report
+
+REP-006 Audit Report
+
+---
+
+## Business Rules
+
+1. Reports must be read-only.
+
+2. Reports support filtering.
+
+3. Reports support exporting.
+
+---
+
+## Dependencies
+
+All Modules
+
+---
+
+## Access Rights
+
+Manager
+
+Administrator
+
+Procurement Officer
+
+---
+
+# 13. AUDIT LOG MODULE
+
+## Module Name
+
+Audit Log Module
+
+## Purpose
+
+Provide accountability and traceability.
+
+---
+
+## Responsibilities
+
+* Record Activities
+* Display Activity History
+
+---
+
+## Database Tables
+
+activity_logs
+
+users
+
+---
+
+## Screens
+
+AUD-001 Activity Log List
+
+AUD-002 Activity Log Details
+
+---
+
+## Business Rules
+
+1. Critical actions must be logged.
+
+2. Audit logs cannot be edited.
+
+3. Audit logs cannot be deleted.
+
+---
+
+## Dependencies
+
+All Modules
+
+---
+
+## Access Rights
+
+Administrator
+
+---
+
+# 14. SETTINGS MODULE
+
+## Module Name
+
+Settings Module
+
+## Purpose
+
+Manage system configuration.
+
+---
+
+## Responsibilities
+
+* Manage Configuration
+* Manage System Preferences
+
+---
+
+## Database Tables
+
+System Configuration Tables
+
+---
+
+## Screens
+
+SET-001 System Settings
+
+---
+
+## Business Rules
+
+1. Only administrators may modify settings.
+
+2. Changes must be logged.
+
+---
+
+## Dependencies
+
+Audit Log Module
+
+---
+
+## Access Rights
+
+Administrator
+
+---
+
+# 15. MODULE DEPENDENCY MAP
+
+Authentication
+↓
+Dashboard
+↓
+Users
+↓
+Procurement Requests
+↓
+Approval Workflow
+↓
+Purchase Orders
+↓
+Inventory
+↓
+Inventory Transactions
+↓
+Reports
+↓
+Notifications
+↓
+Audit Logs
+
+---
+
+# 16. MODULE IMPLEMENTATION ORDER
+
+Phase 1
+
+* Authentication
+* User Management
+
+Phase 2
+
+* Dashboard
+
+Phase 3
+
+* Procurement Requests
+
+Phase 4
+
+* Approval Workflow
+
+Phase 5
+
 * Supplier Management
 
-## Phase 4
-
-Procurement Operations
+Phase 6
 
 * Purchase Orders
-* Goods Receipt
+
+Phase 7
+
+* Inventory Management
+
+Phase 8
+
 * Inventory Transactions
 
-## Phase 5
+Phase 9
 
-Business Intelligence
-
-* Reporting
-* Analytics
 * Notifications
 
-## Phase 6
+Phase 10
 
-Enterprise Features
+* Reporting
 
-* Email Integration
-* Mobile Support
-* Advanced Approval Routing
+Phase 11
 
----
+* Audit Logs
 
-# 15. MODULE SUMMARY
+Phase 12
 
-Total Modules: 10
-
-Core Business Modules:
-
-1. Authentication
-2. Dashboard
-3. User Management
-4. Procurement Requests
-5. Approval Workflow
-6. Inventory Management
-7. Supplier Management
-8. Purchase Orders
-9. Reporting
-10. Audit & Notifications
-
-This document serves as the functional implementation blueprint for development, testing, deployment, and future system expansion.
+* Settings
 
 ---
 
-# 16. CONCLUSION
+# 17. MODULE STATUS
+
+| Module                 | Status  |
+| ---------------------- | ------- |
+| Authentication         | Planned |
+| Dashboard              | Planned |
+| Users                  | Planned |
+| Procurement Requests   | Planned |
+| Approval Workflow      | Planned |
+| Inventory              | Planned |
+| Suppliers              | Planned |
+| Purchase Orders        | Planned |
+| Inventory Transactions | Planned |
+| Notifications          | Planned |
+| Reports                | Planned |
+| Audit Logs             | Planned |
+| Settings               | Planned |
+
+System Version:
+
+1.0
