@@ -66,6 +66,27 @@ switch ($page) {
         ))->index();
 
         break;
+    case 'suppliers_create':
+
+        (new SupplierController(
+            $pdo
+        ))->create();
+
+        break;
+    case 'suppliers_edit':
+
+        (new SupplierController(
+            $pdo
+        ))->edit();
+
+        break;
+    case 'suppliers_toggle':
+
+        (new SupplierController(
+            $pdo
+        ))->toggleActive();
+
+        break;
 
     case 'users/create':
 

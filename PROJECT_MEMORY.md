@@ -1763,3 +1763,41 @@ Phase 1:
 - Edit supplier
 - Activate/deactivate supplier
 - Testing
+
+## Suppliers Module
+
+### Completed Features
+
+* Supplier listing
+* Create supplier
+* Edit supplier
+* Activate supplier
+* Deactivate supplier
+* Company duplicate validation
+* Email validation
+* Rating validation
+* Database integration testing
+
+### Supplier Table
+
+Fields:
+
+* id
+* company_name
+* contact_person
+* email
+* phone
+* address
+* website
+* tax_id
+* payment_terms
+* rating
+* is_active
+* created_at
+* updated_at
+
+### Testing Status
+
+All supplier module tests passed successfully.
+
+###
