@@ -13,6 +13,7 @@ use App\Core\Auth;
 use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use App\Controllers\SupplierController;
+use App\Controllers\InventoryController;
 
 Session::start();
 
@@ -117,6 +118,34 @@ switch ($page) {
         (new UserController(
             $pdo
         ))->index();
+
+        break;
+    case 'inventory':
+
+        (new InventoryController(
+            $pdo
+        ))->index();
+
+        break;
+    case 'inventory_create':
+
+        (new InventoryController(
+            $pdo
+        ))->create();
+
+        break;
+    case 'inventory_edit':
+
+        (new InventoryController(
+            $pdo
+        ))->edit();
+
+        break;
+    case 'inventory_status':
+
+        (new InventoryController(
+            $pdo
+        ))->changeStatus();
 
         break;
 
