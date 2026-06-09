@@ -6,6 +6,8 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Models\ProcurementRequest;
+use App\Models\ApprovalWorkflow;
+use App\Models\InventoryItem;
 
 class ProcurementRequestController
 {
@@ -379,55 +381,92 @@ class ProcurementRequestController
 
     public function submit(): void
     {
-    $this->authorize();
+        $this->authorize();
 
-    $id = (int)(
-        $_GET['id'] ?? 0
-    );
-
-    $requestModel =
-        new ProcurementRequest(
-            $this->pdo
+        $id = (int)(
+            $_GET['id'] ?? 0
         );
 
-    $request =
-        $requestModel->findById(
-            $id
+        $requestModel =
+            new ProcurementRequest(
+                $this->pdo
+            );
+
+        $request =
+            $requestModel->findById(
+                $id
+            );
+
+        if (!$request) {
+
+            http_response_code(404);
+
+            echo '<h1>Request Not Found</h1>';
+
+            exit();
+        }
+
+        $items =
+            $requestModel->getItems(
+                $id
+            );
+
+        if (empty($items)) {
+
+            echo
+            '<h1>Cannot submit a request without items.</h1>';
+
+            exit();
+        }
+
+        try {
+
+            $this->pdo->beginTransaction();
+
+            $requestModel->submit(
+                $id
+            );
+
+            $workflowModel =
+                new ApprovalWorkflow(
+                    $this->pdo
+                );
+
+            $departmentHeadId =
+                $workflowModel
+                    ->getFirstUserByRole(
+                        'department_head'
+                    );
+
+            if (!$departmentHeadId) {
+
+                throw new \RuntimeException(
+                    'No active department head found.'
+                );
+            }
+
+            $workflowModel
+                ->createWorkflow([
+                    'request_id' => $id,
+                    'approver_id' => $departmentHeadId,
+                    'approval_level' => 1
+                ]);
+
+            $this->pdo->commit();
+
+        } catch (\Throwable $e) {
+
+            $this->pdo->rollBack();
+
+            throw $e;
+        }
+
+        header(
+            'Location: ?page=procurement_request_view&id='
+            . $id
         );
-
-    if (!$request) {
-
-        http_response_code(404);
-
-        echo '<h1>Request Not Found</h1>';
 
         exit();
-    }
-
-    $items =
-        $requestModel->getItems(
-            $id
-        );
-
-    if (empty($items)) {
-
-        echo
-        '<h1>Cannot submit a request without items.</h1>';
-
-        exit();
-    }
-
-    $requestModel->submit(
-        $id
-    );
-
-    header(
-        'Location: ?page=procurement_request_view&id='
-        . $id
-    );
-
-    exit();
-
     }
 
 }

@@ -15,6 +15,7 @@ use App\Controllers\UserController;
 use App\Controllers\SupplierController;
 use App\Controllers\InventoryController;
 use App\Controllers\ProcurementRequestController;
+use App\Controllers\ApprovalWorkflowController;
 
 Session::start();
 
@@ -128,7 +129,7 @@ switch ($page) {
         ))->index();
 
         break;
-        
+
     case 'procurement_request_create':
         (new ProcurementRequestController(
             $pdo
@@ -167,11 +168,43 @@ switch ($page) {
 
     case 'procurement_request_delete':
 
-    (new ProcurementRequestController(
-        $pdo
-    ))->delete();
+        (new ProcurementRequestController(
+            $pdo
+        ))->delete();
 
-    break;                             
+        break;                             
+
+    case 'approvals':
+
+        (new ApprovalWorkflowController(
+            $pdo
+        ))->index();
+
+        break;
+
+    case 'approval_view':
+
+        (new ApprovalWorkflowController(
+            $pdo
+        ))->view();
+
+        break;
+
+    case 'approval_approve':
+
+        (new ApprovalWorkflowController(
+            $pdo
+        ))->approve();
+
+        break;
+
+    case 'approval_reject':
+
+        (new ApprovalWorkflowController(
+            $pdo
+        ))->reject();
+
+        break;
 
     case 'inventory_status':
 
