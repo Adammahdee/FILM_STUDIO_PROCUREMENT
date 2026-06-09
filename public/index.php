@@ -14,6 +14,7 @@ use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use App\Controllers\SupplierController;
 use App\Controllers\InventoryController;
+use App\Controllers\ProcurementRequestController;
 
 Session::start();
 
@@ -120,6 +121,66 @@ switch ($page) {
         ))->index();
 
         break;
+
+    case 'procurement_requests':
+        (new ProcurementRequestController(
+            $pdo
+        ))->index();
+
+        break;
+        
+    case 'procurement_request_create':
+        (new ProcurementRequestController(
+            $pdo
+        ))->create();
+
+        break;
+
+    case 'procurement_request_view':
+        (new ProcurementRequestController(
+            $pdo
+        ))->view();
+
+        break;
+
+    case 'procurement_request_edit':
+
+        (new ProcurementRequestController(
+            $pdo
+        ))->edit();
+
+        break;
+
+    case 'procurement_request_add_item':
+        (new ProcurementRequestController(
+            $pdo
+        ))->addItem();
+
+        break;
+
+    case 'procurement_request_submit':
+        (new ProcurementRequestController(
+            $pdo
+        ))->submit();
+
+        break;
+
+    case 'procurement_request_delete':
+
+    (new ProcurementRequestController(
+        $pdo
+    ))->delete();
+
+    break;                             
+
+    case 'inventory_status':
+
+        (new InventoryController(
+            $pdo
+        ))->changeStatus();
+
+        break;
+
     case 'inventory':
 
         (new InventoryController(
@@ -139,13 +200,6 @@ switch ($page) {
         (new InventoryController(
             $pdo
         ))->edit();
-
-        break;
-    case 'inventory_status':
-
-        (new InventoryController(
-            $pdo
-        ))->changeStatus();
 
         break;
 
